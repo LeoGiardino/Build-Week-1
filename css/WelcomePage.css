@@ -42,6 +42,10 @@ span{
 ul{
     margin-top: 3em;
 }
+
+ul li{
+    margin-bottom: 8px;
+}
 h2{
     margin-top: 100px;
 }
@@ -60,12 +64,22 @@ footer p{
     margin-left: 5px;
 }
 #proceed{
-    margin-left: 700px;
+    margin-left: 260px;
+    height: 54px;
+    width: 190px;
+    background-color: #00FFFF;
+    font-weight: bold;
+    border: 0;
+    font-size: 20px;
+    box-shadow:#00ffff 0px 0px 18px;
 }
 input{
+    padding: 0.9em 3em;
+    font-size: 1.1em;
     background-color: transparent;
-    border: 2px solid red;
-    border-radius: 10px;
+    color: white;
+    border: 2px solid white;
+    font-weight: bolder;
    
 }
 
