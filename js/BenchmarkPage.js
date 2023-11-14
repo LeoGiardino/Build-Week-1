@@ -113,10 +113,33 @@ let prova = questions.results[0].question
 domanda.innerText = prova
 
 let arr = []
+
+arr.push(questions.results[0].correct_answer);
+arr.push(questions.results[0].incorrect_answers[0]);
+arr.push(questions.results[0].incorrect_answers[1]);
+arr.push(questions.results[0].incorrect_answers[2]);
+
+console.log(arr);
+
 function show(){
     let risposte = document.querySelector("#answer")
-    let div = document.createElement("div")  
-    
+    let arr2 = [];
+    for(let i=0; i < arr.length; i++){
+        arr2.push(arr[i]);
+    }
+
+    for (let i = arr2.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr2[i], arr2[j]] = [arr2[j], arr2[i]];
+    }
+
+    for(let z = 0; z < arr2.length; z++){
+        let div = document.createElement("div");
+        div.innerText = arr2[z];
+        risposte.appendChild(div);
+    }
+
 }
 
+show();
 
