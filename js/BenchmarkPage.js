@@ -109,37 +109,174 @@ const questions = {
 };
 
 let domanda = document.querySelector("#question");
-let prova = questions.results[0].question
-domanda.innerText = prova
+let risposte = document.querySelector("#answer");
+let domandaAttuale = 0;
 
-let arr = []
+function show() {
+    aggiornaDomanda();
+}
 
-arr.push(questions.results[0].correct_answer);
-arr.push(questions.results[0].incorrect_answers[0]);
-arr.push(questions.results[0].incorrect_answers[1]);
-arr.push(questions.results[0].incorrect_answers[2]);
 
-console.log(arr);
+function domandaSuccessiva() {
+    domandaAttuale++;
+    if (domandaAttuale < questions.results.length) {
+        aggiornaDomanda();
+        startTimer();
+    } else {
+        window.location.href = "ResultsPage.html";
+    }
+}
 
-function show(){
-    let risposte = document.querySelector("#answer")
-    let arr2 = [];
-    for(let i=0; i < arr.length; i++){
-        arr2.push(arr[i]);
+function aggiornaDomanda() {
+    domanda.innerText = questions.results[domandaAttuale].question;
+    risposte.innerHTML = '';
+
+    let arr = [];
+    arr.push(questions.results[domandaAttuale].correct_answer);
+    for (let i=0;i<questions.results[domandaAttuale].incorrect_answers.length;i++) {
+        arr.push(questions.results[domandaAttuale].incorrect_answers[i]);
     }
 
-    for (let i = arr2.length - 1; i > 0; i--) {
+    for (let i = arr.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [arr2[i], arr2[j]] = [arr2[j], arr2[i]];
+        [arr[i], arr[j]] = [arr[j], arr[i]];
     }
 
-    for(let z = 0; z < arr2.length; z++){
+    for (let z = 0; z < arr.length; z++) {
         let div = document.createElement("div");
-        div.innerText = arr2[z];
+        div.innerText = arr[z];
+        div.classList.add("risposta")
+        div.addEventListener("click", () =>{
+            startTimer();
+            domandaSuccessiva();
+        })
         risposte.appendChild(div);
     }
-
 }
+
+
 
 show();
 
+
+
+const FULL_DASH_ARRAY = 283;
+const WARNING_THRESHOLD = 6;
+const ALERT_THRESHOLD = 3;
+const TIME_LIMIT = 10; // Assicurati di definire TIME_LIMIT
+
+const COLOR_CODES = {
+  info: {
+    color: "green",
+  },
+  warning: {
+    color: "orange",
+    threshold: WARNING_THRESHOLD,
+  },
+  alert: {
+    color: "red",
+    threshold: ALERT_THRESHOLD,
+  },
+};
+
+let timePassed = 0;
+let timeLeft = TIME_LIMIT;
+let timerInterval = null;
+let remainingPathColor = COLOR_CODES.info.color;
+
+document.getElementById("app").innerHTML = `
+<div class="base-timer">
+  <svg class="base-timer__svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <g class="base-timer__circle">
+      <circle class="base-timer__path-elapsed" cx="50" cy="50" r="45"></circle>
+      <path
+        id="base-timer-path-remaining"
+        stroke-dasharray="283"
+        class="base-timer__path-remaining ${remainingPathColor}"
+        d="
+          M 50, 50
+          m -45, 0
+          a 45,45 0 1,0 90,0
+          a 45,45 0 1,0 -90,0
+        "
+      ></path>
+    </g>
+  </svg>
+  <span id="base-timer-label" class="base-timer__label">${formatTime(
+    timeLeft
+  )}</span>
+</div>
+`;
+
+
+
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = TIME_LIMIT;
+  timePassed = 0;
+  let initialColor = COLOR_CODES.info.color;
+
+
+
+  timerInterval = setInterval(() => {
+    if (timeLeft > 0) {
+        timePassed+= 1;
+        timeLeft = TIME_LIMIT - timePassed;
+      document.getElementById("base-timer-label").innerHTML = formatTime(timeLeft);
+     
+      setCircleDasharray();
+      setRemainingPathColor(timeLeft);
+    }else if (timeLeft === 0) {
+        timeLeft=0;
+        clearInterval(timerInterval);
+        document.getElementById("base-timer-path-remaining").classList.remove(COLOR_CODES.alert.color, COLOR_CODES.warning.color);
+        document.getElementById("base-timer-path-remaining").classList.add(initialColor);
+        domandaSuccessiva();      
+        
+    } else {
+        clearInterval(timerInterval);
+        startTimer();
+    }
+  }, 1000);
+ 
+}
+
+function formatTime(time) {
+  const minutes = Math.floor(time / 60);
+  let seconds = time % 60;
+  if (seconds < 10) {
+    seconds = `0${seconds}`;
+  }
+  return `${seconds}`;
+}
+
+function setRemainingPathColor(timeLeft) {
+  const { alert, warning, info } = COLOR_CODES;
+  if (timeLeft <= alert.threshold) {
+    document.getElementById("base-timer-path-remaining").classList.remove(warning.color);
+    document.getElementById("base-timer-path-remaining").classList.add(alert.color);
+  } else if (timeLeft <= warning.threshold) {
+    document
+    .getElementById("base-timer-path-remaining")
+    .classList.remove(info.color);
+    document
+    .getElementById("base-timer-path-remaining")
+    .classList.add(warning.color);
+  }
+}
+
+function calculateTimeFraction() {
+  const rawTimeFraction = timeLeft / TIME_LIMIT;
+  return rawTimeFraction - (1 / TIME_LIMIT) * (1 - rawTimeFraction);
+}
+
+function setCircleDasharray() {
+  const circleDasharray = 
+  `${(calculateTimeFraction() * FULL_DASH_ARRAY
+    ).toFixed(0)} 283`;
+  document
+  .getElementById("base-timer-path-remaining")
+  .setAttribute("stroke-dasharray", circleDasharray);
+}
+
+startTimer();
