@@ -147,6 +147,7 @@ function aggiornaDomanda() {
         div.innerText = arr[z];
         div.classList.add("risposta")
         div.addEventListener("click", () =>{
+            resetTimer();
             startTimer();
             domandaSuccessiva();
         })
@@ -208,15 +209,26 @@ document.getElementById("app").innerHTML = `
 </div>
 `;
 
-
-
+function resetTimer() {
+    timeLeft = TIME_LIMIT;
+    timePassed = 0;
+    setRemainingPathColor(timeLeft);
+    setCircleDasharray();
+    document.getElementById("base-timer-label").innerHTML = formatTime(timeLeft);
+    clearInterval(timerInterval);  // Aggiungi questa riga per fermare il timer corrente
+}
 function startTimer() {
   clearInterval(timerInterval);
   timeLeft = TIME_LIMIT;
   timePassed = 0;
   let initialColor = COLOR_CODES.info.color;
 
-
+  document.getElementById("base-timer-path-remaining").classList.remove(
+    COLOR_CODES.alert.color,
+    COLOR_CODES.warning.color
+  );
+  document.getElementById("base-timer-path-remaining").classList.add(initialColor);
+  
 
   timerInterval = setInterval(() => {
     if (timeLeft > 0) {
@@ -225,17 +237,20 @@ function startTimer() {
       document.getElementById("base-timer-label").innerHTML = formatTime(timeLeft);
      
       setCircleDasharray();
-      setRemainingPathColor(timeLeft);
+  setRemainingPathColor(timeLeft);
     }else if (timeLeft === 0) {
         timeLeft=0;
         clearInterval(timerInterval);
         document.getElementById("base-timer-path-remaining").classList.remove(COLOR_CODES.alert.color, COLOR_CODES.warning.color);
         document.getElementById("base-timer-path-remaining").classList.add(initialColor);
-        domandaSuccessiva();      
+        resetTimer();
+            startTimer();
+            domandaSuccessiva(); 
         
     } else {
         clearInterval(timerInterval);
-        startTimer();
+        domandaSuccessiva();
+     
     }
   }, 1000);
  
@@ -251,19 +266,18 @@ function formatTime(time) {
 }
 
 function setRemainingPathColor(timeLeft) {
-  const { alert, warning, info } = COLOR_CODES;
-  if (timeLeft <= alert.threshold) {
-    document.getElementById("base-timer-path-remaining").classList.remove(warning.color);
-    document.getElementById("base-timer-path-remaining").classList.add(alert.color);
-  } else if (timeLeft <= warning.threshold) {
-    document
-    .getElementById("base-timer-path-remaining")
-    .classList.remove(info.color);
-    document
-    .getElementById("base-timer-path-remaining")
-    .classList.add(warning.color);
+    const { alert, warning, info } = COLOR_CODES;
+    if (timeLeft <= alert.threshold) {
+      document.getElementById("base-timer-path-remaining").classList.remove(warning.color);
+      document.getElementById("base-timer-path-remaining").classList.add(alert.color);
+    } else if (timeLeft <= warning.threshold) {
+      document.getElementById("base-timer-path-remaining").classList.remove(info.color);
+      document.getElementById("base-timer-path-remaining").classList.add(warning.color);
+    } else {
+      document.getElementById("base-timer-path-remaining").classList.remove(alert.color, warning.color);
+      document.getElementById("base-timer-path-remaining").classList.add(info.color);
+    }
   }
-}
 
 function calculateTimeFraction() {
   const rawTimeFraction = timeLeft / TIME_LIMIT;
