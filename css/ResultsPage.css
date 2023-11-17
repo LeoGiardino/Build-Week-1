@@ -20,7 +20,7 @@ body {
 
 header {
     width: 85%;
-    margin: 3% auto;
+    margin: 2em 0 1em 2em;
 }
 
 img {
@@ -31,6 +31,16 @@ main {
     width: 85%;
     margin: 0 auto;
 }
+
+#results{
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    margin: 1.5em
+}
+
+
 #resultsPageContainer {
     text-align: center;
 }
@@ -64,12 +74,11 @@ p {
 
 #center {
     width: 28%;
-    margin-left: 5em;
-    margin-right: 5em;
+
 }
 
 button {
-
+    margin-top: 2em;
     padding: 0.9em 3em;
     font-size: 1.1em;
     background-color: transparent;
@@ -94,4 +103,17 @@ a {
 #rateUs {
     display: flex;
     justify-content: center;
+}
+
+canvas {
+    width: 400px; 
+    height: 400px;
+}
+
+@media (max-width: 768px) {
+    canvas {
+        width: 100%;
+        height: auto; 
+        max-width: 400px;
+    }
 }
