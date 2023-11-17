@@ -28,6 +28,8 @@ main h1, #answer, .contatore{
     flex-wrap: wrap;
     justify-content: center;
     height: 250px;
+    margin-bottom: 10%;
+    margin-top: 3%;
 }
 
 #answer div{
