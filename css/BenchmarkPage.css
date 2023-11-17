@@ -3,7 +3,8 @@ body{
     background-size: cover;
     color: #E7E7EB;
     font-family: 'Inter', sans-serif;
-
+    display: grid;
+    place-items: center;
 }
 
 .container {
@@ -18,11 +19,15 @@ main h1, #answer, .contatore{
     text-align: center;
 }
 
+.contatore p> span{
+    color: #d20094;
+}
+
 #answer{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    height: 200px;
+    height: 250px;
 }
 
 #answer div{
@@ -39,11 +44,12 @@ main h1, #answer, .contatore{
     padding: 2%;
     border-radius: 122px 122px 140px 140px / 105px 105px 98px 98px;
     width: 70%;
-    height: 40%;
+    height: 70px;
     background-color: rgb(172 156 156 / 16%);
     border-bottom: none;
     color: white;
-    
+    font-weight: bold;
+    font-size: 1.1em;
 }
 
 #answer div >button:hover{
@@ -57,22 +63,26 @@ header{
     justify-content: space-between;
 }
 header div > img{
-    width: 30%;
- 
+    width: 20%;
+    padding-left: 7%;
 }
 .colore{
     color: #d20094;
 }
+#app{
+    margin-right: 8%;
+}
 
-.base-timer__path-remaining {
-    transition: stroke-dashoffset 1s linear;
-  }
-  
+.textCont{
+    font-size: 0.4em;
+}
+
 
 .base-timer {
     position: relative;
-    width: 200px;
-    height: 200px;
+    width: 170px;
+    height: 170px;
+
   }
   
   .base-timer__svg {
@@ -113,12 +123,13 @@ header div > img{
   
   .base-timer__label {
     position: absolute;
-    width: 200px;
-    height: 200px;
+    width: 170px;
+    height: 170px;
     top: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 18px;
     flex-direction: column;
+    font-size: 2em;
   }

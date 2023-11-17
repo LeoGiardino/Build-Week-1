@@ -144,7 +144,9 @@ function aggiornaDomanda() {
 
     for (let z = 0; z < arr.length; z++) {
         let div = document.createElement("div");
-        div.innerText = arr[z];
+        let btn = document.createElement("button");
+        btn.classList.add("bottone");
+        btn.innerText = arr[z];
         div.classList.add("risposta")
         div.addEventListener("click", () =>{
             resetTimer();
@@ -152,10 +154,13 @@ function aggiornaDomanda() {
             domandaSuccessiva();
         })
         risposte.appendChild(div);
+        div.appendChild(btn);
+    }
+    let contatore = document.querySelector(".contatore")
+    for(let t=0; t < arr.length; t++){
+        contatore.innerHTML = `<p>QUESTION ${domandaAttuale+1} <span>/ 13</span></p>`
     }
 }
-
-
 
 show();
 
@@ -195,10 +200,10 @@ document.getElementById("app").innerHTML = `
         stroke-dasharray="283"
         class="base-timer__path-remaining ${remainingPathColor}"
         d="
-          M 50, 50
-          m -45, 0
-          a 45,45 0 1,0 90,0
-          a 45,45 0 1,0 -90,0
+        M 50, 50
+        m -45, 0
+        a 45,45 0 1,1 90,0
+        a 45,45 0 1,1 -90,0
         "
       ></path>
     </g>
@@ -262,7 +267,7 @@ function formatTime(time) {
   if (seconds < 10) {
     seconds = `0${seconds}`;
   }
-  return `${seconds}`;
+  return `<p class="textCont">SECONDS</p>${seconds}<p class="textCont">REMAINING</p>`;
 }
 
 function setRemainingPathColor(timeLeft) {
