@@ -110,11 +110,32 @@ const questions = {
 
 let domanda = document.querySelector("#question");
 let risposte = document.querySelector("#answer");
+
 let domandaAttuale = 0;
 let risposteUtente = [];
 
+let risposteCorrette = [];
+for (let t=0;t<questions.results.length;t++) {
+  risposteCorrette.push(questions.results[t].correct_answer);
+}
+console.log(risposteCorrette);
+
+
+
+
+
+
 function show() {
     aggiornaDomanda();
+    let btn = document.querySelectorAll("#answer div >button");
+    for(let i=0; i < btn.length; i++){
+      if(btn[i].innerText === risposteCorrette[domandaAttuale]){
+        console.log(btn[i]);
+        btn[i].classList.add("green-bg");
+        console.log(btn[i]);
+        console.log(risposteCorrette[domandaAttuale]);
+      }
+    }
 }
 
 
@@ -122,7 +143,12 @@ function domandaSuccessiva() {
     domandaAttuale++;
     if (domandaAttuale < questions.results.length) {
         aggiornaDomanda();
-        startTimer();
+        startTimer();  
+        if(risposteUtente[domandaAttuale-1] === risposteCorrette[domandaAttuale-1]){
+          alert("Risposta corretta")
+        }else{
+          alert("Risposta sbagliata")
+        }
     } else {
         window.location.href = "ResultsPage.html";
     }
@@ -151,18 +177,16 @@ function aggiornaDomanda() {
         div.classList.add("risposta")
         div.addEventListener("click", () =>{
             risposteUtente.push(btn.innerText)
-            if(risposteCorrette.includes(btn.innerText)){
-              console.log("Giusto");
-            }else{
-              console.log("Sbagliato")
-            }
+            
             resetTimer();
             startTimer();
             domandaSuccessiva();
+            
         })
         risposte.appendChild(div);
         div.appendChild(btn);
     }
+
     let contatore = document.querySelector(".contatore")
     for(let t=0; t < arr.length; t++){
         contatore.innerHTML = `<p>QUESTION ${domandaAttuale+1} <span>/ 13</span></p>`
@@ -176,7 +200,7 @@ show();
 const FULL_DASH_ARRAY = 283;
 const WARNING_THRESHOLD = 6;
 const ALERT_THRESHOLD = 3;
-const TIME_LIMIT = 10; // Assicurati di definire TIME_LIMIT
+const TIME_LIMIT = 30; // Assicurati di definire TIME_LIMIT
 
 const COLOR_CODES = {
   info: {
@@ -308,11 +332,8 @@ function setCircleDasharray() {
 startTimer();
 
 
-let risposteCorrette = [];
-for (let t=0;t<questions.results.length;t++) {
-  risposteCorrette.push(questions.results[t].correct_answer);
-}
-console.log(risposteCorrette)
+
 function checkRisposte(){
   
 }
+
