@@ -111,6 +111,7 @@ const questions = {
 let domanda = document.querySelector("#question");
 let risposte = document.querySelector("#answer");
 let domandaAttuale = 0;
+let risposteUtente = [];
 
 function show() {
     aggiornaDomanda();
@@ -149,6 +150,12 @@ function aggiornaDomanda() {
         btn.innerText = arr[z];
         div.classList.add("risposta")
         div.addEventListener("click", () =>{
+            risposteUtente.push(btn.innerText)
+            if(risposteCorrette.includes(btn.innerText)){
+              console.log("Giusto");
+            }else{
+              console.log("Sbagliato")
+            }
             resetTimer();
             startTimer();
             domandaSuccessiva();
@@ -299,3 +306,13 @@ function setCircleDasharray() {
 }
 
 startTimer();
+
+
+let risposteCorrette = [];
+for (let t=0;t<questions.results.length;t++) {
+  risposteCorrette.push(questions.results[t].correct_answer);
+}
+console.log(risposteCorrette)
+function checkRisposte(){
+  
+}
