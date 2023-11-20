@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function () {
         unmatch,
     };
 
-
     const total = answer.match + answer.unmatch;
     const correctPercentage = ((answer.match / total) * 100).toFixed(1);
     const wrongPercentage = ((answer.unmatch / total) * 100).toFixed(1);
@@ -24,6 +23,22 @@ document.addEventListener('DOMContentLoaded', function () {
         configureDoughnutChart(canvas, wrongPercentage, correctPercentage);
     }
 
+    if (correctPercentage > 50) {
+
+        for (let i = 0; i < 10; i++) {
+            confetti({
+                particleCount: 20,
+                spread: 120,
+                origin: { y: Math.random(), x: Math.random() },
+                colors: ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff'],
+                shapes: ['circle', 'square'],
+                scalar: 1.2,
+            });
+        }
+    }
+    
+    
+    
     function createParagraph(text, fontSize, margin, fontWeight) {
         const paragraph = document.createElement('p');
         paragraph.innerText = text;
@@ -49,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function configureDoughnutChart(canvas, wrongPercentage, correctPercentage) {
         const context = canvas.getContext('2d');
         const backgroundColors = ['#D20094', '#00FFFF'];
-        const cutoutPercentage = '70%';
+        const cutoutPercentage = 115;
 
         adjustOpacityBasedOnPercentage(wrongPercentage, context, canvas.width, canvas.height);
 
@@ -134,10 +149,13 @@ document.addEventListener('DOMContentLoaded', function () {
         configureText(ctx, 'a few minutes.', 'white', width, height, 0.4, 0.45);
         configureText(ctx, 'Check your email (including', 'white', width, height, 0.4, 0.5);
         configureText(ctx, 'promotions/spam folder)', 'white', width, height, 0.4, 0.55);
+        
+    
     }
 
     function configureSorryText(ctx, width, height) {
         configureText(ctx, 'Sorry!', 'white', width, height, 0.4, 0.4, '1.2em');
         configureText(ctx, "You didn't pass the exam", 'red', width, height, 0.4, 0.45, '1.2em');
     }
+
 });
