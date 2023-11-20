@@ -108,12 +108,105 @@ const questions = {
   ]
 };
 
+const hardQuestions = {
+  "response_code": 0,
+    "results": [
+      {
+        type: "multiple",
+        difficulty: "hard",
+        category: "Science: Computers",
+        question: "What five letter word is the motto of the IBM Computer company?",
+        correct_answer: "Think",
+        incorrect_answers: ["Click", "Logic", "Pixel"]
+      },
+      {
+        type: "multiple",
+        difficulty: "hard",
+        category: "Science: Computers",
+        question: "How many bytes are in a single Kibibyte?",
+        correct_answer: "1024",
+        incorrect_answers: ["2400", "1000", "1240"]
+      },
+      {
+        type: "boolean",
+        difficulty: "hard",
+        category: "Science: Computers",
+        question: "\"Windows NT\" is a monolithic kernel.",
+        correct_answer: "False",
+        incorrect_answers: ["True"]
+      },
+      {
+        type: "multiple",
+        difficulty: "hard",
+        category: "Science: Computers",
+        question: "What is the main CPU in the Sega Mega Drive / Sega Genesis?",
+        correct_answer: "Motorola 68000",
+        incorrect_answers: ["Zilog Z80", "Yamaha YM2612", "Intel 8088"]
+      },
+      {
+        type: "boolean",
+        difficulty: "hard",
+        category: "Science: Computers",
+        question: "The last Windows operating system to be based on the Windows 9x kernel was Windows 98.",
+        correct_answer: "False",
+        incorrect_answers: ["True"]
+      },
+      {
+        type: "multiple",
+        difficulty: "hard",
+        category: "Science: Computers",
+        question: "In computing terms, typically what does CLI stand for?",
+        correct_answer: "Command Line Interface",
+        incorrect_answers: ["Common Language Input", "Control Line Interface", "Common Language Interface"]
+      },
+      {
+        type: "multiple",
+        difficulty: "hard",
+        category: "Science: Computers",
+        question: "While Apple was formed in California, in which western state was Microsoft founded?",
+        correct_answer: "New Mexico",
+        incorrect_answers: ["Washington", "Colorado", "Arizona"]
+      },
+      {
+        type: "boolean",
+        difficulty: "hard",
+        category: "Science: Computers",
+        question: "The open source program Redis is a relational database server.",
+        correct_answer: "False",
+        incorrect_answers: ["True"]
+      },
+      {
+        type: "multiple",
+        difficulty: "hard",
+        category: "Science: Computers",
+        question: "What was the first commercially available computer processor?",
+        correct_answer: "Intel 4004",
+        incorrect_answers: ["Intel 486SX", "TMS 1000", "AMD AM386"]
+      },
+      {
+        type: "boolean",
+        difficulty: "hard",
+        category: "Science: Computers",
+        question: "It's not possible to format a write-protected DVD-R Hard Disk.",
+        correct_answer: "True",
+        incorrect_answers: ["False"]
+      }
+    ]
+  };
+
+
 let domanda = document.querySelector("#question");
 let risposte = document.querySelector("#answer");
+let numero = document.querySelector(".numero");
+let difficulty = localStorage.getItem("scelta");
 let domandaAttuale = 0;
 let score = 0;
 let risposteUtente = [];
 let risposteCorrette = [];
+
+let indice = localStorage.getItem("indice");
+
+
 
 for (let t=0;t<questions.results.length;t++) {
 risposteCorrette.push(questions.results[t].correct_answer);
@@ -125,61 +218,120 @@ function show() {
 
 
 function domandaSuccessiva() {
-domandaAttuale++;
-if (domandaAttuale < questions.results.length) {
-    aggiornaDomanda();
-    startTimer();
-} else {
-    checkRisposte();
-    storeResults();
-    window.location.href = "ResultsPage.html";
-}
+  domandaAttuale++;
+  if (domandaAttuale < indice) {
+      aggiornaDomanda();
+      startTimer();
+  } else {
+      checkRisposte();
+      storeResults();
+      window.location.href = "ResultsPage.html";
+  }
 }
 
 
 function aggiornaDomanda() {
-  domanda.innerText = questions.results[domandaAttuale].question;
+
+  if(difficulty == "easy"){
+    domanda.innerText = questions.results[domandaAttuale].question;
+    console.log("ciao");
+  }else if (difficulty == "hard"){
+    domanda.innerText = hardQuestions.results[domandaAttuale].question;
+    console.log("ciao");
+  }
+  
   risposte.innerHTML = '';
 
   let arr = [];
+  let hardArr = [];
   arr.push(questions.results[domandaAttuale].correct_answer);
-  for (let i=0;i<questions.results[domandaAttuale].incorrect_answers.length;i++) {
+  hardArr.push(hardQuestions.results[domandaAttuale].correct_answer);
+
+
+
+  if(arr.length == 0){
+    for (let i=0;i<questions.results[domandaAttuale].incorrect_answers.length;i++) {
       arr.push(questions.results[domandaAttuale].incorrect_answers[i]);
-  }
+    }
 
-  for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
 
-  for (let z = 0; z < arr.length; z++) {
-      let div = document.createElement("div");
-      let btn = document.createElement("button");
-      btn.classList.add("bottone");
-      btn.innerText = arr[z];
-      div.classList.add("risposta")
-      div.addEventListener("click", () =>{
-          risposteUtente.push(btn.innerText)
-          if(risposteCorrette.includes(btn.innerText)){
-            console.log("Giusto");
-            btn.style.backgroundColor = "green";
-          }else{
-            console.log("Sbagliato")
-            btn.style.backgroundColor = "red";
-          }
-          resetTimer();
-          setTimeout(() => {
-            startTimer();
-            domandaSuccessiva();
-        }, 2000);
-      })
-      risposte.appendChild(div);
-      div.appendChild(btn);
+    for (let z = 0; z < arr.length; z++) {
+        let div = document.createElement("div");
+        let btn = document.createElement("button");
+        btn.classList.add("bottone");
+        btn.innerText = arr[z];
+        div.classList.add("risposta")
+        div.addEventListener("click", () =>{
+            risposteUtente.push(btn.innerText)
+            if(risposteCorrette.includes(btn.innerText)){
+              console.log("Giusto");
+              btn.style.backgroundColor = "green";
+            }else{
+              console.log("Sbagliato")
+              btn.style.backgroundColor = "red";
+            }
+            resetTimer();
+            setTimeout(() => {
+              startTimer();
+              domandaSuccessiva();
+          }, 2000);
+        })
+        risposte.appendChild(div);
+        div.appendChild(btn);
+    }
+    let contatore = document.querySelector(".contatore")
+    for(let t=0; t < arr.length; t++){
+        contatore.innerHTML = `<p>QUESTION ${domandaAttuale+1} <span>/ 13</span></p>`
+    }
+  }else if(hardArr.length > 0){
+    for (let i=0;i< hardQuestions.results[domandaAttuale].incorrect_answers.length;i++) {
+      hardArr.push(hardQuestions.results[domandaAttuale].incorrect_answers[i]);
+      
+    }
+
+    for (let i = hardQuestions.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+
+    for (let z = 0; z < hardArr.length; z++) {
+        let div = document.createElement("div");
+        let btn = document.createElement("button");
+        btn.classList.add("bottone");
+        btn.innerText = hardArr[z];
+        div.classList.add("risposta")
+        div.addEventListener("click", () =>{
+            risposteUtente.push(btn.innerText)
+            if(risposteCorrette.includes(btn.innerText)){
+              console.log("Giusto");
+              btn.style.backgroundColor = "green";
+            }else{
+              console.log("Sbagliato")
+              btn.style.backgroundColor = "red";
+            }
+            resetTimer();
+            setTimeout(() => {
+              startTimer();
+              domandaSuccessiva();
+          }, 2000);
+        })
+        risposte.appendChild(div);
+        div.appendChild(btn);
+    }
+    let contatore = document.querySelector(".contatore")
+    for(let t=0; t < arr.length; t++){
+        contatore.innerHTML = `<p>QUESTION ${domandaAttuale+1} <span>/ ${indice}</span></p>`
+    }
+  
+
+  }else{
+
   }
-  let contatore = document.querySelector(".contatore")
-  for(let t=0; t < arr.length; t++){
-      contatore.innerHTML = `<p>QUESTION ${domandaAttuale+1} <span>/ 13</span></p>`
-  }
+  
 }
 
 show();
