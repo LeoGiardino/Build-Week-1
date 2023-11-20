@@ -249,7 +249,7 @@ function aggiornaDomanda() {
 
 
 
-  if(arr.length == 0){
+  if(difficulty == "easy"){
     for (let i=0;i<questions.results[domandaAttuale].incorrect_answers.length;i++) {
       arr.push(questions.results[domandaAttuale].incorrect_answers[i]);
     }
@@ -285,9 +285,9 @@ function aggiornaDomanda() {
     }
     let contatore = document.querySelector(".contatore")
     for(let t=0; t < arr.length; t++){
-        contatore.innerHTML = `<p>QUESTION ${domandaAttuale+1} <span>/ 13</span></p>`
+        contatore.innerHTML = `<p>QUESTION ${domandaAttuale+1} <span>/ ${indice}</span></p>`
     }
-  }else if(hardArr.length > 0){
+  }else if(difficulty == "hard"){
     for (let i=0;i< hardQuestions.results[domandaAttuale].incorrect_answers.length;i++) {
       hardArr.push(hardQuestions.results[domandaAttuale].incorrect_answers[i]);
       
@@ -495,8 +495,7 @@ for(let i = 0; i < risposteUtente.length; i++){
     score++;
   }
 }
-localStorage.setItem('totalQuestions', questions.results.length.toString());
+localStorage.setItem('totalQuestions', indice);
 localStorage.setItem('score', score.toString());
 localStorage.setItem('risposteUtente', risposteUtente.toString());
 }
-
