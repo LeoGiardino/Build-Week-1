@@ -67,7 +67,7 @@ header{
     display: flex;
     justify-content: space-between;
 }
-header div > img{
+header div a > img{
     width: 20%;
     padding-left: 7%;
 }

@@ -35,24 +35,20 @@
 
             <label for="difficoltà">Choose a difficulty:</label>
             <select id="difficoltà" name="scelta" onchange="getValue()">
-            <option value="" disabled selected hidden>Scegli</option>
-            <option value="hard">Hard</option>
-            <option value="easy">Easy</option>
+                <option value="" disabled selected hidden>Scegli</option>
+                <option value="hard">Hard</option>
+                <option value="easy">Easy</option>
 
-
-            <br>
-
-            <input id="size" onchange="getValue2()" type="number" min="1" max="13">
-          
-
-
-
-    </select>
+            </select>
+            <p>
+                <label for="size">Choose number of questions:</label>
+                <input id="size" onchange="getValue2()" type="number" min="1" max="13">
+            </p>
         </main>
         <footer>
             <input type="checkbox">
             <p><span>I promise to answer myself without help from anyone</span></p>
-            <button id="proceed"><a href="BenchmarkPage.html">PROCEED</a></button>
+            <button id="proceed">PROCEED</button>
         </footer>
     </div>
     <script src="../js/WelcomePage.js"></script>
